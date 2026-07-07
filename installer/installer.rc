@@ -1,0 +1,31 @@
+101 ICON "icon.ico"
+102 RCDATA "..\payload.zip"
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+FILEFLAGSMASK   0x3fL
+FILEFLAGS       0x0L
+FILEOS          0x40004L
+FILETYPE        0x1L
+FILESUBTYPE     0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName",     "savsis"
+            VALUE "FileDescription", "nexdex.space launcher"
+            VALUE "FileVersion",     "1.0.0.0"
+            VALUE "InternalName",    "nexdex.space"
+            VALUE "LegalCopyright",  "Copyright (C) 2026 savsis"
+            VALUE "OriginalFilename","nexdex.space-setup.exe"
+            VALUE "ProductName",     "nexdex.space"
+            VALUE "ProductVersion",  "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

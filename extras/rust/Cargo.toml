@@ -1,0 +1,9 @@
+[package]
+name = "nexdex-tools"
+version = "0.1.0"
+edition = "2021"
+description = "decorative rust toys, not part of the nexdex.space build"
+
+[[bin]]
+name = "hello"
+path = "src/main.rs"

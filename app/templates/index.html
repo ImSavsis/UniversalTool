@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nexdex.space</title>
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">nex<span class="brand-accent">dex</span>.space</div>
+  <a class="gh-btn" href="https://github.com/imsavsis" target="_blank" rel="noopener" title="GitHub">
+    <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+      0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+      -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+      .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+      -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+      .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+      .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+      0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+    </svg>
+  </a>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="downloader">Загрузчик</button>
+  <button class="tab-btn" data-tab="converter">Конвертер</button>
+  <button class="tab-btn" data-tab="metadata">Метаданные</button>
+  <button class="tab-btn" data-tab="scripts">Скрипты</button>
+</nav>
+
+<main>
+
+  <!-- ================= DOWNLOADER ================= -->
+  <section id="tab-downloader" class="tab-panel active">
+    <div class="card">
+      <div class="mode-switch">
+        <button class="mode-btn active" data-mode="link">Ссылка</button>
+        <button class="mode-btn" data-mode="search">Поиск</button>
+      </div>
+
+      <div id="mode-link" class="mode-panel active">
+        <input id="dl-url" class="big-input" type="text" placeholder="Вставь ссылку — YouTube / SoundCloud / Apple Music / Spotify / Yandex Music">
+        <div class="row">
+          <select id="dl-format">
+            <option value="mp3">MP3</option>
+            <option value="flac">FLAC (lossless)</option>
+            <option value="wav">WAV (lossless)</option>
+            <option value="m4a">M4A</option>
+            <option value="alac">ALAC (lossless)</option>
+            <option value="ogg">OGG</option>
+            <option value="opus">OPUS</option>
+            <option value="mp4">MP4 (видео)</option>
+          </select>
+          <select id="dl-quality"></select>
+          <button id="dl-go" class="primary-btn">Скачать</button>
+        </div>
+      </div>
+
+      <div id="mode-search" class="mode-panel">
+        <div class="row">
+          <input id="search-q" class="big-input" type="text" placeholder="Название трека или исполнитель...">
+          <select id="search-platform">
+            <option value="youtube">YouTube</option>
+            <option value="soundcloud">SoundCloud</option>
+            <option value="apple_music">Apple Music</option>
+          </select>
+          <button id="search-go" class="primary-btn">Искать</button>
+        </div>
+        <div id="search-results" class="card-grid"></div>
+      </div>
+
+      <div id="dl-progress" class="progress-box hidden">
+        <div class="progress-track"><div id="dl-progress-bar" class="progress-fill"></div></div>
+        <div id="dl-progress-text" class="progress-text"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>История</h3>
+        <button id="history-clear" class="ghost-btn">очистить</button>
+      </div>
+      <div id="history-list" class="card-grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= CONVERTER ================= -->
+  <section id="tab-converter" class="tab-panel">
+    <div class="card">
+      <div id="drop-zone" class="drop-zone">
+        <p>Перетащи файл сюда или</p>
+        <label class="primary-btn file-btn">
+          выбрать файл
+          <input id="conv-file" type="file" hidden>
+        </label>
+        <p class="hint">картинки (webp, png, jpg, ico...) · pdf · pptx · аудио (flac, wav, mp3...) · видео (mp4, mkv...)</p>
+      </div>
+
+      <div id="conv-result" class="conv-result hidden">
+        <div id="conv-file-info"></div>
+        <div class="row">
+          <select id="conv-target"></select>
+          <button id="conv-go" class="primary-btn">Конвертировать</button>
+        </div>
+        <div id="conv-output"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= METADATA ================= -->
+  <section id="tab-metadata" class="tab-panel">
+    <div class="card">
+      <div class="mode-switch">
+        <button class="mode-btn active" data-meta-mode="single">Один файл</button>
+        <button class="mode-btn" data-meta-mode="batch">Массово</button>
+      </div>
+
+      <div id="meta-single" class="mode-panel active">
+        <label class="primary-btn file-btn">
+          выбрать аудиофайл
+          <input id="meta-file" type="file" accept=".mp3,.flac,.wav,.m4a,.mp4,.ogg,.opus" hidden>
+        </label>
+
+        <div id="meta-form" class="meta-form hidden">
+          <div class="meta-cover-row">
+            <img id="meta-cover-preview" class="cover-preview" alt="обложка">
+            <label class="ghost-btn file-btn">
+              сменить обложку
+              <input id="meta-cover-input" type="file" accept="image/*" hidden>
+            </label>
+          </div>
+          <input id="meta-title" placeholder="название">
+          <input id="meta-artist" placeholder="исполнитель">
+          <input id="meta-album" placeholder="альбом">
+          <div class="row">
+            <input id="meta-year" placeholder="год" style="max-width:120px">
+            <input id="meta-track" placeholder="№ трека" style="max-width:120px">
+          </div>
+          <button id="meta-save" class="primary-btn">Сохранить</button>
+          <div id="meta-save-result"></div>
+        </div>
+      </div>
+
+      <div id="meta-batch" class="mode-panel">
+        <label class="primary-btn file-btn">
+          выбрать несколько файлов
+          <input id="meta-batch-files" type="file" accept=".mp3,.flac,.wav,.m4a,.mp4,.ogg,.opus" multiple hidden>
+        </label>
+        <div id="meta-batch-list" class="batch-list"></div>
+
+        <div id="meta-batch-form" class="meta-form hidden">
+          <div class="meta-cover-row">
+            <img id="meta-batch-cover-preview" class="cover-preview" alt="обложка">
+            <label class="ghost-btn file-btn">
+              обложка для всех
+              <input id="meta-batch-cover-input" type="file" accept="image/*" hidden>
+            </label>
+          </div>
+          <input id="meta-batch-artist" placeholder="исполнитель (для всех)">
+          <input id="meta-batch-album" placeholder="альбом (для всех)">
+          <input id="meta-batch-year" placeholder="год (для всех)" style="max-width:160px">
+          <button id="meta-batch-save" class="primary-btn">Применить ко всем</button>
+          <div id="meta-batch-result"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SCRIPTS ================= -->
+  <section id="tab-scripts" class="tab-panel">
+    <div class="card">
+      <div class="mode-switch">
+        <button class="mode-btn active" data-lang="python">Python</button>
+        <button class="mode-btn" data-lang="lua">Lua</button>
+      </div>
+      <div class="script-grid">
+        <textarea id="script-input" placeholder="вставь код сюда..." spellcheck="false"></textarea>
+        <textarea id="script-output" placeholder="результат появится здесь" spellcheck="false" readonly></textarea>
+      </div>
+      <div class="row">
+        <button id="script-format" class="primary-btn">Форматировать</button>
+        <button id="script-download" class="ghost-btn" disabled>Скачать</button>
+      </div>
+      <div id="script-error" class="script-error hidden"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">made by savsis with ♥</footer>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
